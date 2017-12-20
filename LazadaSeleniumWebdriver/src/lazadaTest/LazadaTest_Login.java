@@ -13,7 +13,7 @@ import helper.*;
 import lazadaPage.LazadaPage_Login;
 
 public class LazadaTest_Login {
-WebDriver driver;
+	WebDriver driver;
 	
 	String filePath = "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaTestData\\TestDataLazada.xlsx";
 	
@@ -54,7 +54,7 @@ WebDriver driver;
 		return data;
 	}
 	
-	/*
+	
 	@Test(priority=1, dataProvider="data")
 	public void checkLinks(String id_case, String linkText, String expectedTitle, String testResult) throws Exception {
 		LazadaPage_Login login = new LazadaPage_Login(driver);
@@ -70,12 +70,11 @@ WebDriver driver;
 		
 		TestExcelUtil.writeResult(filePath, sheetName, colName, id_case, result);
 		capture.takeScreenshot(result, "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + actualTitle + ".jpg");
-		
 		Assert.assertEquals(actualTitle, expectedTitle);
 	}
 	
 	@Test(priority=2, dataProvider="data")
-	public void loginForm(String id_case, String email, String msgEmail, String password, String msgPassword, String expectedTitle, String testResult) throws Exception {
+	public void loginForm(String id_case, String titleCase, String email, String msgEmail, String password, String msgPassword, String expectedTitle, String testResult) throws Exception {
 		LazadaPage_Login login = new LazadaPage_Login(driver);
 		ScreenshotUtil capture = new ScreenshotUtil(driver);
 		
@@ -85,47 +84,42 @@ WebDriver driver;
 		
 		String sheetName = "2.2. ĐN_Form đăng nhập";
 		String colName = "Status";
+		String source = "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + titleCase + ".jpg";
 		
 		if(msgEmail != "") {
 			boolean result = login.getMessageEmail().equals(msgEmail);
 			
 			TestExcelUtil.writeResult(filePath, sheetName, colName, id_case, result);
-			
-			capture.takeScreenshot(result, "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + login.getMessageEmail() + ".jpg");
-			
+			capture.takeScreenshot(result, source);
 			Assert.assertEquals(login.getMessageEmail(), msgEmail);
 		}
 		else if(msgPassword != "") {
 			boolean result = login.getMessagePassword().equals(msgPassword);
 			
 			TestExcelUtil.writeResult(filePath, sheetName, colName, id_case, result);
-			
-			capture.takeScreenshot(result, "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + login.getMessagePassword() + ".jpg");
-			
+			capture.takeScreenshot(result, source);
 			Assert.assertEquals(login.getMessagePassword(), msgPassword);
 		}
 		else if(msgEmail == "" && msgPassword == "") {
 			String actualTitle = driver.getTitle();
 			boolean result = actualTitle.equals(expectedTitle);
 			
-			capture.takeScreenshot(result, "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + actualTitle + ".jpg");
-			
+			capture.takeScreenshot(result, source);
 			TestExcelUtil.writeResult(filePath, sheetName, colName, id_case, actualTitle.equals(expectedTitle));
-			
 			Assert.assertEquals(actualTitle, expectedTitle);
-			if(result) {
+			if(result) 
 				login.logoutAccount();
-			}
 		}
 	}
-	*/
+	
 	@Test(priority=3, dataProvider="data")
-	public void loginWithGoogleOrFacebook(String id_case, String typeAccount, String email, String password, String expectedTitle, String testResult) throws Exception {
+	public void loginWithGoogleOrFacebook(String id_case, String titleCase, String typeAccount, String email, String password, String expectedTitle, String testResult) throws Exception {
 		LazadaPage_Login login = new LazadaPage_Login(driver);
 		ScreenshotUtil capture = new ScreenshotUtil(driver);
 		
 		String sheetName = "2.3. ĐN_Tài khoản liên kết";
 		String colName = "Status";
+		String source = "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + titleCase + ".jpg";
 		
 		String baseHandle = driver.getWindowHandle();
 		String handle = "";
@@ -133,8 +127,8 @@ WebDriver driver;
 		if(typeAccount.equalsIgnoreCase("Facebook")) {
 			login.clickFacebookButton();
 			
-			Set<String> listHandle = driver.getWindowHandles();
-			for(String elHandle : listHandle) {
+			Set<String> listHandles = driver.getWindowHandles();
+			for(String elHandle : listHandles) {
 				handle = elHandle;
 			}
 			driver.switchTo().window(handle);
@@ -146,27 +140,23 @@ WebDriver driver;
 			//login.clickAllowButtonFacebook();
 			
 			driver.switchTo().window(baseHandle);
-			
-			login.waitConnectAccountFacebookToLazada(expectedTitle);
+			login.waitConnectAccount(expectedTitle);
 			
 			String actualTitle = driver.getTitle();
 			boolean result = actualTitle.equals(expectedTitle);
 			
-			capture.takeScreenshot(result, "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + actualTitle + ".jpg");
-			
+			capture.takeScreenshot(result, source);
 			TestExcelUtil.writeResult(filePath, sheetName, colName, id_case, result);
-			
 			Assert.assertEquals(actualTitle, expectedTitle);
-			
-			if(result) {
+			if(result) 
 				login.logoutAccount();
-			}
+			
 		}
 		else if(typeAccount.equalsIgnoreCase("Google+")) {
 			login.clickGoogleButton();
 
-			Set<String> listHandle = driver.getWindowHandles();
-			for(String elHandle : listHandle) {
+			Set<String> listHandles = driver.getWindowHandles();
+			for(String elHandle : listHandles) {
 				handle = elHandle;
 			}
 			driver.switchTo().window(handle);
@@ -178,25 +168,18 @@ WebDriver driver;
 			login.clickNextToLoginGoogle();
 			
 			driver.switchTo().window(baseHandle);
-			
-			login.waitConnectAccountGoogle(expectedTitle);
+			login.waitConnectAccount(expectedTitle);
 			
 			String actualTitle = driver.getTitle();
 			boolean result = actualTitle.equals(expectedTitle);
 			
-
-			capture.takeScreenshot(result, "E:\\AutomationTest\\ProjectJava\\LazadaSeleniumWebdriver\\lazadaScreenshot\\screenshot_Login\\" + id_case + "_Fail_" + actualTitle + ".jpg");
-			
+			capture.takeScreenshot(result, source);
 			TestExcelUtil.writeResult(filePath, sheetName, colName, id_case, result);
-			
 			Assert.assertEquals(actualTitle, expectedTitle);
-			
-			if(result) {
+			if(result) 
 				login.logoutAccount();
-			}
 		}
 	}
-
 	
 	@AfterTest
 	public void finishTest() {

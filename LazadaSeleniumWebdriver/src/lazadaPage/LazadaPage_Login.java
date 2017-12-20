@@ -98,11 +98,6 @@ public class LazadaPage_Login {
 			return false;
 	}
 	
-	public void waitConnectAccountFacebookToLazada(String expectedTitle) {
-		WebDriverWait waiter = new WebDriverWait(driver, 15);
-		waiter.until(ExpectedConditions.titleIs(expectedTitle));
-	}
-	
 	//methods: login with google+ account
 	public void clickGoogleButton() {
 		driver.findElement(btnGoogle).click();
@@ -142,7 +137,7 @@ public class LazadaPage_Login {
 			return false;
 	}
 	
-	public void waitConnectAccountGoogle(String expectedTitle) {
+	public void waitConnectAccount(String expectedTitle) {
 		WebDriverWait waiter = new WebDriverWait(driver, 20);
 		waiter.until(ExpectedConditions.titleIs(expectedTitle));
 	}
